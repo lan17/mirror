@@ -1,0 +1,105 @@
+<html>
+    <head>
+    <style>
+        
+        .flip-horizontal {
+                   -moz-transform: scaleX(-1);
+        -o-transform: scaleX(-1);
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+        filter: FlipH;
+        -ms-filter: "FlipH";
+        }
+        
+        .frame {
+            text-align: center;
+            height: 100%;
+            width: 100%;
+        }
+        
+        .controls {
+            margin: auto;
+            text-align: center;
+            font-size: 5vh;
+        }
+        button {
+            font-size: 5vh;
+        }
+        
+        #mirror  {
+            width: 80%;
+            height: 80%;
+            margin: auto;
+        }
+        
+        input + label {
+            border: solid 2px black;
+            -moz-box-shadow:    3px 3px 5px 6px #ccc;
+            -webkit-box-shadow: 3px 3px 5px 6px #ccc;
+            box-shadow:         3px 3px 5px 6px #ccc;
+            
+        }
+        input:checked + label {
+            border: solid 2px green;
+           -moz-box-shadow:    inset 0 0 10px #000000;
+           -webkit-box-shadow: inset 0 0 10px #000000;
+           box-shadow:         inset 0 0 10px #000000;
+        }
+        
+    </style>
+    </head>
+<body>
+    <noscript>This page needs javascript to wire your camera to a video element</noscript>
+    
+
+    <div class="frame">
+        <video id="mirror" class="flip-horizontal"></video><button style="float:right;"
+                onclick="window.close();">X</button>
+        <br/>
+        <div class="controls">
+            <button onclick="play()">Play</button>
+            <button onclick="pause()">Pause</button>
+            <br/>
+            <input type="checkbox" checked id="lrmirror" onchange="flipHorizontal()" style="display: none"/>
+            <label for="lrmirror" class="toggle">Horizontal Flip</label>
+        </div>
+       
+    </div>
+    
+    <script>
+        navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia;
+        const video = document.getElementById('mirror');
+        const horizontalFlip = document.getElementById('lrmirror');
+        
+        function flipHorizontal() {
+            if(horizontalFlip.checked) {
+               video.className = 'flip-horizontal';
+            } else {
+                video.className = '';
+            }
+        }
+
+        function play() {
+            if (video.srcObject == null) {
+                navigator.getUserMedia({video: true}, stream => {
+                    video.srcObject = stream;
+                    video.play();
+                }, () => {});
+            } else {
+                video.play();
+            }
+        }
+
+        function pause() {
+            video.pause();
+            if (video.srcObject != null) {
+                video.srcObject.getTracks().forEach(track => track.stop());
+            }
+            video.srcObject = null;
+        }
+        
+        play();
+
+    </script>   
+
+</body>
