@@ -81,7 +81,7 @@
 
         function play() {
             if (video.srcObject == null) {
-                navigator.getUserMedia({video: true}, stream => {
+                navigator.getUserMedia({video: { facingMode: "user" }}, stream => {
                     video.srcObject = stream;
                     video.play();
                 }, () => {});
@@ -98,7 +98,9 @@
             video.srcObject = null;
         }
         
+
         play();
+
 
     </script>   
 
